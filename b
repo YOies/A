@@ -1,4 +1,4 @@
---b
+--d
 repeat wait() until game:IsLoaded()
 local startTime = tick()
 local towerRecord = {}
@@ -7,7 +7,7 @@ local mt = getrawmetatable(game)
 local oldNamecall = mt.__namecall
 setreadonly(mt, false)
 mt.__namecall = newcclosure(function(self, ...)
-    args = {...}
+    local args = {...}
     if getnamecallmethod() == "FireServer" and tostring(self) == "SummonTower" then
         towerRecord[#towerRecord + 1] = {
             ["time"] = tick() - startTime; 
@@ -17,24 +17,22 @@ mt.__namecall = newcclosure(function(self, ...)
             ["type"] = "CreateUnit";
         }    
     elseif getnamecallmethod() == "FireServer" and tostring(self) == "Upgrade" then
+        local cframePosition = args[1].HumanoidRootPart.CFrame.Position
         towerRecord[#towerRecord + 1] = {
             ["time"] = tick() - startTime; 
-                ["upgradestar"] = tostring(args[1].UpgradeStar.Value);
-                ["cframe"] =   tostring(args[1].HumanoidRootPart.CFrame);
-                ["character"] = args[1].Name; 
-                ["type"] = "UpgradeUnit";
-            
+            ["upgradestar"] = tostring(args[1].UpgradeStar.Value);
+            ["cframe"] = tostring(cframePosition);
+            ["character"] = args[1].Name; 
+            ["type"] = "UpgradeUnit";
         }    
     elseif getnamecallmethod() == "FireServer" and tostring(self) == "Sell" then
         towerRecord[#towerRecord + 1] = {
             ["time"] = tick() - startTime; 
             ["character"] = args[1].Name; 
-            ["cframe"] =  tostring(args[1].HumanoidRootPart.CFrame);
+            ["cframe"] = tostring(args[1].HumanoidRootPart.CFrame.Position);
             ["type"] = "SellUnit";
         }    
     end
-
-    
     return oldNamecall(self, unpack(args))
 end)
 setreadonly(mt, true)
