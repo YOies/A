@@ -1,3 +1,4 @@
+--a
 repeat wait() until game:IsLoaded()
 local startTime = tick()
 local towerRecord = {}
@@ -18,7 +19,7 @@ mt.__namecall = newcclosure(function(self, ...)
     elseif getnamecallmethod() == "FireServer" and tostring(self) == "Upgrade" then
         towerRecord[#towerRecord + 1] = {
             ["time"] = tick() - startTime; 
-                ["upgradestar"] = args[1].Name and args[1].UpgradeStar and args[1].UpgradeStar.Value or "Unknown"; -- Use default value if .Name or .UpgradeStar is nil
+                ["upgradestar"] = tostring(args[1].UpgradeStar.Value) ; -- Use default value if .Name or .UpgradeStar is nil
                 ["character"] = args[1].Name; -- Assuming args[1] has .Name property
                 ["type"] = "UpgradeUnit";
             
